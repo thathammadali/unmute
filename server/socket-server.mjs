@@ -15,17 +15,25 @@ const rooms = {};
 io.on('connection', (socket) => {
     console.log('User Connected!');
 
+    // When someone joins the room
     socket.on('join-room', async (username, roomId) => {
         await socket.join(roomId);
         console.log(`${username} joined room ${roomId}!`);
 
+        if (!rooms[roomId]) {
+            rooms[roomId] = [];
+        }
+
+        rooms[roomId].push(username);
+
         socket.emit('room-joined', roomId);
+        io.to(roomId).emit('user-joined', rooms[roomId]);
     });
 
-    socket.on('get-users', (roomId) => {
-        console.log(23);
-        return 23;
-    });
+    // When someone loads the room
+    socket.on("prepare-room", (roomId) => {
+        socket.emit("room-prepared", rooms[roomId]);
+    })
 });
 
 server.listen(3001, () => {
