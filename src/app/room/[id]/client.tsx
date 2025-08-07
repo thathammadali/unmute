@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 import socket from '@/lib/socket';
 import { MdCallEnd, MdOutlinePresentToAll } from 'react-icons/md';
-import { useRouter } from 'next/navigation';
 import { CiMicrophoneOff, CiMicrophoneOn } from 'react-icons/ci';
 import { BsChat, BsPerson } from 'react-icons/bs';
 import { ActionButton, ToggleButton } from '@/Components/buttons';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 export default function RoomClient({ roomId }: { roomId: string }) {
     const [users, setUsers] = useState<Array<string>>([]);
@@ -17,10 +18,11 @@ export default function RoomClient({ roomId }: { roomId: string }) {
     const [isMembersBarVisible, setIsMembersBarVisible] = useState(false);
     const [isChatBarVisible, setIsChatBarVisible] = useState(false);
 
+    const router = useRouter();
+
     const joinRoom = () => {
-        const username = 'Someone Here';
-        console.log('Here:', roomId, username);
-        if (!username || !roomId) return;
+        const username = Cookies.get("username");
+        if (!username || !roomId) router.push('/');
         setIsConnecting(false);
         setIsConnected(true);
         console.log('Joining room:', roomId, username);

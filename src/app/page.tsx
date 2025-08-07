@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import socket from '@/lib/socket';
+import Cookies from "js-cookie";
 
 export default function Landing() {
     const [username, setUsername] = useState('');
@@ -21,6 +22,7 @@ export default function Landing() {
 
     const handleKeyDown = async (e: string) => {
         if (e === 'Enter') {
+            Cookies.set("username", username);
             goToRoom();
         }
     };
