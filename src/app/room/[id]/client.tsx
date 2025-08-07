@@ -1,10 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import socket from '@/lib/socket';
 import { MdCallEnd, MdOutlinePresentToAll } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
-import { CiMicrophoneOff, CiVideoOff } from 'react-icons/ci';
+import { CiMicrophoneOff, CiMicrophoneOn } from 'react-icons/ci';
 import { BsChat, BsPerson } from 'react-icons/bs';
+import { ActionButton, ToggleButton } from '@/Components/buttons';
 
 export default function RoomClient({ roomId }: { roomId: string }) {
     const [users, setUsers] = useState<Array<string>>([]);
@@ -108,6 +109,11 @@ function BottomBar(Props: {
     setIsChatBarVisible: Function;
 }) {
     const { setIsMembersBarVisible, setIsChatBarVisible } = Props;
+    const [isMicOn, setIsMicOn] = useState(false);
+
+    const toggleMic = () => {
+        setIsMicOn((pv) => !pv);
+    };
 
     const router = useRouter();
 
@@ -131,26 +137,22 @@ function BottomBar(Props: {
                     'flex h-full w-full flex-1 items-center justify-center gap-2'
                 }
             >
-                <CiMicrophoneOff
-                    className={'rounded-full border-2 p-1 hover:cursor-pointer'}
-                    size={35}
-                    color={'white'}
+                <ToggleButton
+                    offIcon={<CiMicrophoneOff />}
+                    onIcon={<CiMicrophoneOn />}
+                    isOn={isMicOn}
+                    onClickHandler={toggleMic}
                 />
-                <CiVideoOff
-                    className={'rounded-full border-2 p-1 hover:cursor-pointer'}
-                    size={35}
-                    color={'white'}
-                />
+
                 <MdOutlinePresentToAll
                     className={'rounded-full border-2 p-1 hover:cursor-pointer'}
                     size={35}
                     color={'white'}
                 />
-                <MdCallEnd
-                    className={'rounded-full border-2 p-1 hover:cursor-pointer'}
-                    size={35}
+                <ActionButton
+                    icon={<MdCallEnd />}
                     color={'red'}
-                    onClick={leaveRoom}
+                    onClickHandler={leaveRoom}
                 />
             </div>
 
