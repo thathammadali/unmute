@@ -1,6 +1,6 @@
 'use client';
 import socket from '@/lib/socket';
-import { KeyboardEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Landing() {
@@ -18,9 +18,9 @@ export default function Landing() {
         }
     }, [isJoined]);
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Enter") {
-            connect();
+    const handleKeyDown = async (e: string) => {
+        if (e === "Enter") {
+            await connect();
         }
     };
 
@@ -46,7 +46,7 @@ export default function Landing() {
             joinRoom();
         };
 
-        const onRoomJoined = (roomId: string) => {
+        const onRoomJoined = () => {
             setIsJoined(true);
         };
 
@@ -73,14 +73,14 @@ export default function Landing() {
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    onKeyDown={(e)=>handleKeyDown(e)}
+                    onKeyDown={(e)=>handleKeyDown(e.key)}
                 />
                 <input
                     className="h-12 rounded-3xl border border-gray-300 p-3"
                     placeholder="Room ID"
                     value={roomId}
                     onChange={(e) => setRoomId(e.target.value)}
-                    onKeyDown={(e)=>handleKeyDown(e)}
+                    onKeyDown={(e)=>handleKeyDown(e.key)}
                 />
                 <button
                     className="h-12 rounded-3xl bg-blue-300 hover:cursor-pointer hover:bg-blue-500"
