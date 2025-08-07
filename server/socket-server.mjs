@@ -27,27 +27,23 @@ io.on('connection', (socket) => {
         }
         rooms[roomId].push(username);
         // Map socketId to user
-        sockets[socket.id] = {username: username, room: roomId};
+        sockets[socket.id] = { username: username, room: roomId };
 
         socket.emit('room-joined', roomId);
         io.to(roomId).emit('user-joined', rooms[roomId]);
     });
 
-    // When someone loads the room
-    socket.on("prepare-room", (roomId) => {
-        socket.emit("room-prepared", rooms[roomId]);
-    })
-
-    socket.on('disconnect', ()=>{
+    socket.on('disconnect', () => {
+        console.log('User Disconnected!');
         const user = sockets[socket.id];
         const username = user.username;
         const room = user.room;
-        console.log(`${username} has left ${room}!`)
+        console.log(`${username} has left ${room}!`);
 
         rooms[room] = rooms[room].filter((user) => user !== username);
 
         io.to(room).emit('refresh-users', rooms[room]);
-    })
+    });
 });
 
 server.listen(3001, () => {
