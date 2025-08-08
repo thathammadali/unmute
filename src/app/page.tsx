@@ -32,6 +32,7 @@ export default function Landing() {
     return (
         <div className="flex h-[100vh] w-[100vw] items-center justify-center">
             <div className="flex w-[50%] flex-col gap-2">
+                <h1 className={'mx-auto mb-12 text-5xl'}>Unmute</h1>
                 <input
                     className="h-12 rounded-3xl border border-gray-300 p-3"
                     placeholder="Username"
