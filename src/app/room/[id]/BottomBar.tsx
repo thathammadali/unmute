@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ActionButton, ToggleButton } from '@/app/room/[id]/bottomBar/Buttons';
+import { ActionButton, ToggleButton } from '@/app/room/[id]/Buttons';
 import { BsChat, BsPerson } from 'react-icons/bs';
 import { CiMicrophoneOff, CiMicrophoneOn } from 'react-icons/ci';
 import { MdCallEnd, MdOutlinePresentToAll } from 'react-icons/md';

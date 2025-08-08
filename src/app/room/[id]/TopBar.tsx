@@ -1,4 +1,4 @@
-import { ActionButton } from '@/app/room/[id]/bottomBar/Buttons';
+import { ActionButton } from '@/app/room/[id]/Buttons';
 import { BiClipboard } from 'react-icons/bi';
 
 export default function TopBar({ roomId }: { roomId: string }) {

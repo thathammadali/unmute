@@ -40,6 +40,15 @@ io.on('connection', (socket) => {
         io.to(roomId).emit('user-joined', rooms[roomId]);
     });
 
+    socket.on('send-message', (message) => {
+        console.log(message);
+
+        io.to(sockets[socket.id].room).emit('receive-message', {
+            sender: sockets[socket.id].username,
+            message: message,
+        });
+    });
+
     socket.on('disconnect', () => {
         console.log('User Disconnected!');
         const user = sockets[socket.id];
