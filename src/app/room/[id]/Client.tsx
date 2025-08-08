@@ -7,6 +7,11 @@ import { MembersBar } from '@/app/room/[id]/MembersBar';
 import { ChatBar } from '@/app/room/[id]/ChatBar';
 import { BottomBar } from './BottomBar';
 
+interface User {
+    id: string;
+    username: string;
+}
+
 export default function RoomClient({ roomId }: { roomId: string }) {
     const [users, setUsers] = useState<Array<string>>([]);
 
@@ -21,10 +26,10 @@ export default function RoomClient({ roomId }: { roomId: string }) {
 
     const joinRoom = () => {
         const username = Cookies.get('username');
+        console.log('Joining room:', roomId, username);
         if (!username || !roomId) router.push('/');
         setIsConnecting(false);
         setIsConnected(true);
-        console.log('Joining room:', roomId, username);
         socket.emit('join-room', username, roomId);
     };
 
@@ -49,8 +54,8 @@ export default function RoomClient({ roomId }: { roomId: string }) {
 
         socket.emit('prepare-room', roomId);
 
-        const receiveUserList = (users: Array<string>) => {
-            setUsers(users);
+        const receiveUserList = (users: User[]) => {
+            setUsers(users.map((user) => user.username));
         };
 
         socket.on('connect', onConnect);

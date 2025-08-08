@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
         if (!rooms[roomId]) {
             rooms[roomId] = [];
         }
-        rooms[roomId].push(username);
+        rooms[roomId].push({ id: socket.id, username: username });
         // Map socketId to user
         sockets[socket.id] = { username: username, room: roomId };
 
@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
         const room = user.room;
         console.log(`${username} has left ${room}!`);
 
-        rooms[room] = rooms[room].filter((user) => user !== username);
+        rooms[room] = rooms[room].filter((user) => user.id !== socket.id);
 
         io.to(room).emit('refresh-users', rooms[room]);
     });

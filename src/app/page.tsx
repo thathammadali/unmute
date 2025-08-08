@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import socket from '@/lib/socket';
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 
 export default function Landing() {
     const [username, setUsername] = useState('');
@@ -17,12 +17,12 @@ export default function Landing() {
     }, []);
 
     const goToRoom = () => {
+        Cookies.set('username', username);
         router.push('/room/' + roomId);
     };
 
     const handleKeyDown = async (e: string) => {
         if (e === 'Enter') {
-            Cookies.set("username", username);
             goToRoom();
         }
     };
