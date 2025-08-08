@@ -16,7 +16,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
     const [users, setUsers] = useState<Array<string>>([]);
 
     const [isConnected, setIsConnected] = useState(false);
-    const [isConnecting, setIsConnecting] = useState(false);
+    const [isConnecting, setIsConnecting] = useState(true);
     const [isJoined, setIsJoined] = useState(false);
 
     const [isMembersBarVisible, setIsMembersBarVisible] = useState(false);
@@ -26,14 +26,19 @@ export default function RoomClient({ roomId }: { roomId: string }) {
 
     const joinRoom = () => {
         const username = Cookies.get('username');
-        console.log('Joining room:', roomId, username);
-        if (!username || !roomId) router.push('/');
         setIsConnecting(false);
         setIsConnected(true);
         socket.emit('join-room', username, roomId);
     };
 
     const connect = () => {
+        const username = Cookies.get('username');
+        if (!username || !roomId) {
+            alert('Please enter a valid username and room id');
+            router.push('/');
+            return;
+        }
+
         if (!socket.connected) {
             setIsConnecting(true);
             socket.connect();
@@ -73,15 +78,28 @@ export default function RoomClient({ roomId }: { roomId: string }) {
     }, []);
 
     if (isConnecting)
-        return <h1>Establishing a connection to the server...</h1>;
-    if (isConnected && !isJoined) return <h1>Joining the specified room...</h1>;
+        return (
+            <div
+                className={'flex h-screen w-screen items-center justify-center'}
+            >
+                <h1>Establishing a connection to the server...</h1>
+            </div>
+        );
+    if (isConnected && !isJoined)
+        return (
+            <div
+                className={'flex h-screen w-screen items-center justify-center'}
+            >
+                <h1>Joining the specified room...</h1>{' '}
+            </div>
+        );
 
     const gridSize = Math.ceil(Math.sqrt(users.length));
     const colClass = `grid-cols-${gridSize}`;
     const rowClass = `grid-rows-${gridSize}`;
 
     return (
-        <div className={'flex h-screen flex-col bg-neutral-600'}>
+        <div className={'flex h-screen w-screen flex-col bg-neutral-600'}>
             <div
                 className={
                     'flex h-20 w-full items-center justify-center bg-neutral-600 text-white'

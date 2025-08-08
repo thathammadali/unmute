@@ -1,8 +1,15 @@
 import express from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
+import { nanoid } from 'nanoid';
+import cors from 'cors';
 
 const app = express();
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+    })
+);
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
@@ -44,6 +51,15 @@ io.on('connection', (socket) => {
 
         io.to(room).emit('refresh-users', rooms[room]);
     });
+});
+
+app.get('/generate-room', (req, res) => {
+    let roomId = nanoid(8);
+    while (rooms[roomId]) {
+        roomId = nanoid(8);
+        console.log('Ran once');
+    }
+    res.send(roomId);
 });
 
 server.listen(3001, () => {

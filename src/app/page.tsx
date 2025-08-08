@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import socket from '@/lib/socket';
 import Cookies from 'js-cookie';
+import { FaRandom } from 'react-icons/fa';
 
 export default function Landing() {
     const [username, setUsername] = useState('');
@@ -17,6 +18,10 @@ export default function Landing() {
     }, []);
 
     const goToRoom = () => {
+        if (!username || !roomId) {
+            alert('Please enter a username and room id');
+            return;
+        }
         Cookies.set('username', username);
         router.push('/room/' + roomId);
     };
@@ -24,6 +29,17 @@ export default function Landing() {
     const handleKeyDown = async (e: string) => {
         if (e === 'Enter') {
             goToRoom();
+        }
+    };
+
+    const generateRandomID = async () => {
+        try {
+            const id = await (
+                await fetch('http://localhost:3001/generate-room')
+            ).text();
+            setRoomId(id);
+        } catch (err) {
+            console.log(err);
         }
     };
 
@@ -39,16 +55,31 @@ export default function Landing() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     onKeyDown={(e) => handleKeyDown(e.key)}
+                    title={'The name that will be displayed in the room'}
                 />
-                <input
-                    className="h-12 rounded-3xl border border-gray-300 p-3"
-                    placeholder="Room ID"
-                    value={roomId}
-                    onChange={(e) => setRoomId(e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(e.key)}
-                />
+                <div
+                    className={'flex w-full items-center justify-center gap-2'}
+                >
+                    <input
+                        className="h-12 w-full rounded-3xl border border-gray-300 p-3"
+                        placeholder="Room ID"
+                        value={roomId}
+                        onChange={(e) => setRoomId(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e.key)}
+                        maxLength={8}
+                        title={
+                            "The ID of the room you're trying to join. If the room doesn't exist, it will be created"
+                        }
+                    />
+                    <FaRandom
+                        size={30}
+                        className={'hover:cursor-pointer'}
+                        title={'Generate random ID'}
+                        onClick={generateRandomID}
+                    />
+                </div>
                 <button
-                    className="h-12 rounded-3xl bg-blue-300 hover:cursor-pointer hover:bg-blue-500"
+                    className="h-12 rounded-3xl bg-blue-300 select-none hover:cursor-pointer hover:bg-blue-500"
                     onClick={handleClick}
                 >
                     Join
