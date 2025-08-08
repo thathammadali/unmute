@@ -1,8 +1,8 @@
 import { cloneElement, ReactElement } from 'react';
 
 const sharedDesign = {
-    className: 'rounded-full border-2 p-1 hover:cursor-pointer',
-    size: 35,
+    className: 'rounded-full border-2 p-1 hover:cursor-pointer hover:bg-black',
+    size: 45,
 };
 
 export function ToggleButton({
@@ -25,11 +25,11 @@ export function ToggleButton({
 
 export function ActionButton({
     icon,
-    color,
+    color = 'white',
     onClickHandler,
 }: {
     icon: ReactElement<any>;
-    color: string;
+    color?: string;
     onClickHandler: Function;
 }) {
     return cloneElement(icon, {

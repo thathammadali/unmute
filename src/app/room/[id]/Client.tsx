@@ -1,12 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import socket from '@/lib/socket';
-import { MdCallEnd, MdOutlinePresentToAll } from 'react-icons/md';
-import { CiMicrophoneOff, CiMicrophoneOn } from 'react-icons/ci';
-import { BsChat, BsPerson } from 'react-icons/bs';
-import { ActionButton, ToggleButton } from '@/Components/buttons';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { MembersBar } from '@/app/room/[id]/MembersBar';
+import { ChatBar } from '@/app/room/[id]/ChatBar';
+import { BottomBar } from './BottomBar';
 
 export default function RoomClient({ roomId }: { roomId: string }) {
     const [users, setUsers] = useState<Array<string>>([]);
@@ -21,7 +20,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
     const router = useRouter();
 
     const joinRoom = () => {
-        const username = Cookies.get("username");
+        const username = Cookies.get('username');
         if (!username || !roomId) router.push('/');
         setIsConnecting(false);
         setIsConnected(true);
@@ -102,94 +101,6 @@ export default function RoomClient({ roomId }: { roomId: string }) {
                 setIsMembersBarVisible={setIsMembersBarVisible}
                 setIsChatBarVisible={setIsChatBarVisible}
             />
-        </div>
-    );
-}
-
-function BottomBar(Props: {
-    setIsMembersBarVisible: Function;
-    setIsChatBarVisible: Function;
-}) {
-    const { setIsMembersBarVisible, setIsChatBarVisible } = Props;
-    const [isMicOn, setIsMicOn] = useState(false);
-
-    const toggleMic = () => {
-        setIsMicOn((pv) => !pv);
-    };
-
-    const router = useRouter();
-
-    const leaveRoom = () => {
-        router.push('/');
-    };
-
-    return (
-        <div className={'flex h-20 bg-neutral-600'}>
-            <div className={'flex h-full w-20 items-center justify-center'}>
-                <BsPerson
-                    className={'rounded-full border-2 p-1 hover:cursor-pointer'}
-                    size={35}
-                    color={'white'}
-                    onClick={() => setIsMembersBarVisible((pv: boolean) => !pv)}
-                />
-            </div>
-
-            <div
-                className={
-                    'flex h-full w-full flex-1 items-center justify-center gap-2'
-                }
-            >
-                <ToggleButton
-                    offIcon={<CiMicrophoneOff />}
-                    onIcon={<CiMicrophoneOn />}
-                    isOn={isMicOn}
-                    onClickHandler={toggleMic}
-                />
-
-                <MdOutlinePresentToAll
-                    className={'rounded-full border-2 p-1 hover:cursor-pointer'}
-                    size={35}
-                    color={'white'}
-                />
-                <ActionButton
-                    icon={<MdCallEnd />}
-                    color={'red'}
-                    onClickHandler={leaveRoom}
-                />
-            </div>
-
-            <div className={'flex h-full w-20 items-center justify-center'}>
-                <BsChat
-                    className={'rounded-full border-2 p-1 hover:cursor-pointer'}
-                    size={35}
-                    color={'white'}
-                    onClick={() => setIsChatBarVisible((pv: boolean) => !pv)}
-                />
-            </div>
-        </div>
-    );
-}
-
-function MembersBar() {
-    return (
-        <div
-            className={
-                'flex h-full w-50 justify-center rounded-r-2xl bg-white p-2 transition-all duration-300'
-            }
-        >
-            People here
-        </div>
-    );
-}
-
-function ChatBar() {
-    return (
-        <div
-            className={
-                'flex h-full w-50 justify-center rounded-l-2xl bg-white p-2 transition-all duration-300'
-            }
-        >
-            Chat here
         </div>
     );
 }

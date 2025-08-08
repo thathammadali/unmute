@@ -1,4 +1,4 @@
-import RoomClient from '@/app/room/[id]/client';
+import RoomClient from '@/app/room/[id]/Client';
 import { Metadata } from 'next';
 
 interface Props {
