@@ -44,7 +44,8 @@ io.on('connection', (socket) => {
         console.log(message);
 
         io.to(sockets[socket.id].room).emit('receive-message', {
-            sender: sockets[socket.id].username,
+            sender_id: socket.id,
+            sender_name: sockets[socket.id].username,
             message: message,
         });
     });

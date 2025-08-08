@@ -4,7 +4,14 @@ import { BiSend } from 'react-icons/bi';
 import socket from '@/lib/socket';
 
 interface IMessage {
-    sender: string;
+    sender: string | null;
+    message: string;
+    color: string;
+}
+
+interface SocketMessage {
+    sender_id: string;
+    sender_name: string;
     message: string;
 }
 
@@ -13,11 +20,17 @@ export function ChatBar() {
     const [messages, setMessages] = useState<Array<IMessage>>([]);
 
     useEffect(() => {
-        const handleReceiveMessage = (message: IMessage) => {
-            setMessages((prev) => {
-                const updated = [...prev, message];
-                console.log(updated);
-                return updated;
+        const handleReceiveMessage = (message: SocketMessage) => {
+            setMessages((prev: Array<IMessage>) => {
+                const isOwn = message.sender_id === socket.id;
+
+                const newMessage = {
+                    sender:  isOwn ? null : message.sender_name,
+                    message: message.message,
+                    color: isOwn ? 'gray-300' : 'blue-300'
+                }
+
+                return [...prev, newMessage];
             });
         };
 
@@ -41,15 +54,14 @@ export function ChatBar() {
             <h1>Chat</h1>
             <hr className={'my-2 w-full flex-1'} />
 
-            <div className={'flex flex-col justify-start'}>
-                {messages.length === 0 ? (
-                    <p>Nothing to display</p>
-                ) : (
+            <div className={'my-2 flex w-full gap-2 flex-col justify-start'}>
+                {(
                     messages.map((message, index) => (
                         <Message
                             key={index}
                             sender={message.sender}
                             message={message.message}
+                            color={message.color}
                         />
                     ))
                 )}
@@ -72,11 +84,13 @@ export function ChatBar() {
     );
 }
 
-function Message({ sender, message }: IMessage) {
+function Message({ sender, message, color }: IMessage) {
     return (
-        <div className={'flex flex-col gap-2 rounded-xl bg-blue-400'}>
-            <h2>{sender}</h2>
-            <p>{message}</p>
+        <div className={`flex w-full ${sender ? 'justify-start' : 'justify-end'}`}>
+            <div className={`p-2 flex w-[90%] flex-col gap-2 rounded-xl bg-${color}`}>
+                {sender && <h2 className={"font-bold"}>{sender}</h2>}
+                <p>{message}</p>
+            </div>
         </div>
     );
 }
