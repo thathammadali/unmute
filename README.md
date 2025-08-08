@@ -1,24 +1,38 @@
 # Unmute
 *Documentation Last Updated: 08/08/2025*
-## Project Abstract
-A **minimalistic** web-based meeting app.
-## Story
-I decided to design this app when I grew tired of using "limited meeting apps". As a student and startup member who joins meetings a lot, all the apps I tried either had limited meeting time for free, the need to download the client, and/or the requirement to create an account. Moreover, little to none of them had AI integrated in them for assistance. 
 
-I found all of the above surprisingly absurd (except the meeting time limit because I'm aware of server cost). So, "Unmute" was born. 
+## Abstract
+**Unmute** is a **minimalistic, web-based meeting app** designed for students, startups, and small teams who value speed, simplicity, and seamless connectivity—without bloatware, sign-up walls, or unnecessary restrictions.
+
+## Motivation & Story
+As someone who attends meetings regularly—both as a student and a startup member—I became frustrated with mainstream meeting apps. Most either:
+- Limit meeting duration on free plans
+- Require downloading a desktop/mobile client
+- Force users to create an account before joining
+
+And almost none integrate even basic AI to make meetings more efficient.
+
+So, I decided to build **Unmute**: a fast, no-install, no-account-required meeting app designed for hassle-free communication.
+
 ## Features
-- Text Communication
-- Voice Communication
-- Screen Sharing
+- **Text Communication** – Instant messaging for meeting participants
+- **Voice Communication** – Real-time audio conferencing
+- **Screen Sharing** – Share your screen without extra plugins
+
 ## Specialties
-- No account required
-- No limits on meeting
-- No download required
-## Future-Work Intentions
-- AI Integration: 
-  - Nothing too crazy but at least some sort of "suggestions", "analysis of contribution", etc. 
-- Efficient Meetings
-  - The aim is to provide seamless connection by avoiding unnecessary features. 
-- And more! 
+- **No Account Required** – Join instantly, no sign-ups
+- **Unlimited Meetings** – No arbitrary meeting caps
+- **Web-Only** – Works directly in your browser, no downloads
+
+## Future Plans
+- **AI Integration** – Basic yet useful AI features such as:
+  - Contribution analysis
+  - Smart meeting summaries
+  - Participation suggestions
+- **Optimized Performance** – Keep connections stable and lag-free by avoiding feature bloat
+- **Community-Driven Features** – Build what users actually need
+
 ## Conclusion
-Thank you for reading this far! And thank you to all the contributors :)
+**Unmute** aims to keep meetings simple, fast, and accessible for everyone. Whether you’re collaborating on a class project or running a startup meeting, the goal is the same: **connect instantly, without distractions**.
+
+Special thanks to all current and future contributors who will help make Unmute even better 🚀  
