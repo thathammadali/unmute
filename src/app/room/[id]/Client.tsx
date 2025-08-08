@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { MembersBar } from '@/app/room/[id]/MembersBar';
 import { ChatBar } from '@/app/room/[id]/ChatBar';
 import { BottomBar } from './BottomBar';
+import TopBar from '@/app/room/[id]/TopBar';
 
 interface User {
     id: string;
@@ -100,13 +101,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
 
     return (
         <div className={'flex h-screen w-screen flex-col bg-neutral-600'}>
-            <div
-                className={
-                    'flex h-20 w-full items-center justify-center bg-neutral-600 text-white'
-                }
-            >
-                {roomId}
-            </div>
+            <TopBar roomId={roomId} />
 
             <div className={'flex w-full flex-1'}>
                 {isMembersBarVisible && <MembersBar />}

@@ -1,7 +1,8 @@
 import { cloneElement, ReactElement } from 'react';
 
 const sharedDesign = {
-    className: 'rounded-full border-2 p-1 hover:cursor-pointer hover:bg-black',
+    className:
+        'rounded-full border-2 p-1 hover:cursor-pointer hover:bg-black p-2',
     size: 45,
 };
 
