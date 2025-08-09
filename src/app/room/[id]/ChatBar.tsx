@@ -19,12 +19,13 @@ interface SocketMessage {
 
 interface ChatBarProps {
     isVisible: boolean;
+    isReady: boolean;
+    setIsReady: Function;
 }
 
-export function ChatBar({ isVisible }: ChatBarProps) {
+export function ChatBar({ isVisible, isReady, setIsReady }: ChatBarProps) {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState<Array<IMessage>>([]);
-    const [isReady, setIsReady] = useState(false);
 
     const bottomRef = useRef<HTMLDivElement>(null);
 

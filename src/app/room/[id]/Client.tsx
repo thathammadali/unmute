@@ -23,6 +23,9 @@ export default function RoomClient({ roomId }: { roomId: string }) {
     const [isMembersBarVisible, setIsMembersBarVisible] = useState(false);
     const [isChatBarVisible, setIsChatBarVisible] = useState(false);
 
+    const [isMembersBarReady, setIsMembersBarReady] = useState(false);
+    const [isChatBarReady, setIsChatBarReady] = useState(false);
+
     const router = useRouter();
 
     const joinRoom = () => {
@@ -101,10 +104,17 @@ export default function RoomClient({ roomId }: { roomId: string }) {
 
     return (
         <div className={'flex h-screen w-screen flex-col bg-neutral-600'}>
+            {/*Show a cover until all components are ready*/}
+            {(isJoined && (!isMembersBarReady || !isChatBarReady)) && (<div
+            className={'absolute bg-white flex h-screen w-screen items-center justify-center'}
+        >
+            <h1>Preparing the room...</h1>
+        </div>)};
+
             <TopBar roomId={roomId} />
 
             <div className={'flex w-full flex-1 overflow-x-hidden'}>
-                <MembersBar isVisible={isMembersBarVisible} />
+                <MembersBar isVisible={isMembersBarVisible} isReady={isMembersBarReady} setIsReady={setIsMembersBarReady} />
                 <div
                     className={`grid transition-all duration-150 ease-in-out ${colClass} ${rowClass} flex-1 gap-2 px-4`}
                 >
@@ -112,7 +122,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
                         <UserCard key={index} username={user} />
                     ))}
                 </div>
-                <ChatBar isVisible={isChatBarVisible} />
+                <ChatBar isVisible={isChatBarVisible} isReady={isChatBarReady} setIsReady={setIsChatBarReady} />
             </div>
 
             <BottomBar

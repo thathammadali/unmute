@@ -1,12 +1,13 @@
 import Bar from '@/app/room/[id]/Bar';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface MembersBarProps {
     isVisible: boolean;
+    isReady: boolean;
+    setIsReady: Function;
 }
 
-export function MembersBar({ isVisible }: MembersBarProps) {
-    const [isReady, setIsReady] = useState(false);
+export function MembersBar({ isVisible, isReady, setIsReady }: MembersBarProps) {
 
     useEffect(() => {
         requestAnimationFrame(()=>{
