@@ -103,8 +103,8 @@ export default function RoomClient({ roomId }: { roomId: string }) {
         <div className={'flex h-screen w-screen flex-col bg-neutral-600'}>
             <TopBar roomId={roomId} />
 
-            <div className={'flex w-full flex-1'}>
-                {isMembersBarVisible && <MembersBar />}
+            <div className={'flex w-full flex-1 overflow-x-hidden'}>
+                <MembersBar isVisible={isMembersBarVisible} />
                 <div
                     className={`grid transition-all duration-150 ease-in-out ${colClass} ${rowClass} flex-1 gap-2 px-4`}
                 >
@@ -112,7 +112,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
                         <UserCard key={index} username={user} />
                     ))}
                 </div>
-                {isChatBarVisible && <ChatBar />}
+                <ChatBar isVisible={isChatBarVisible} />
             </div>
 
             <BottomBar

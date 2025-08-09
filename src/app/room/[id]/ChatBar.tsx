@@ -2,6 +2,7 @@ import { Ref, useEffect, useRef, useState } from 'react';
 import { ActionButton } from '@/app/room/[id]/Buttons';
 import { BiSend } from 'react-icons/bi';
 import socket from '@/lib/socket';
+import Bar from '@/app/room/[id]/Bar';
 
 interface IMessage {
     sender: string | null;
@@ -16,9 +17,14 @@ interface SocketMessage {
     time: string;
 }
 
-export function ChatBar() {
+interface ChatBarProps {
+    isVisible: boolean;
+}
+
+export function ChatBar({ isVisible }: ChatBarProps) {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState<Array<IMessage>>([]);
+    const [isReady, setIsReady] = useState(false);
 
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -37,6 +43,7 @@ export function ChatBar() {
             });
         };
 
+        setIsReady(true);
         socket.on('receive-message', handleReceiveMessage);
 
         return () => {
@@ -70,11 +77,7 @@ export function ChatBar() {
     };
 
     return (
-        <div
-            className={
-                'flex h-[calc(100vh-10rem)] w-100 flex-col items-center overflow-y-hidden rounded-l-2xl bg-white p-2 transition-all duration-300'
-            }
-        >
+        <Bar isVisible={isVisible} isReady={isReady}>
             <h1>Chat</h1>
             <hr className={'my-2 w-full'} />
 
@@ -95,7 +98,7 @@ export function ChatBar() {
                     color={'oklch(70.7% 0.165 254.624)'}
                 />
             </div>
-        </div>
+        </Bar>
     );
 }
 

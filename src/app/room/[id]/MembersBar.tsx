@@ -1,11 +1,20 @@
-export function MembersBar() {
+import Bar from '@/app/room/[id]/Bar';
+import { useEffect, useState } from 'react';
+
+interface MembersBarProps {
+    isVisible: boolean;
+}
+
+export function MembersBar({ isVisible }: MembersBarProps) {
+    const [isReady, setIsReady] = useState(false);
+
+    useEffect(() => {
+        setIsReady(true);
+    }, []);
+
     return (
-        <div
-            className={
-                'flex h-[calc(100vh-10rem)] w-50 justify-center rounded-r-2xl bg-white p-2 transition-all duration-300'
-            }
-        >
-            People here
-        </div>
+        <Bar isVisible={isVisible} isReady={isReady} invertedTransform={true}>
+            <h1>Members</h1>
+        </Bar>
     );
 }
