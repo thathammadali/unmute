@@ -109,7 +109,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
             className={'absolute bg-white flex h-screen w-screen items-center justify-center'}
         >
             <h1>Preparing the room...</h1>
-        </div>)};
+        </div>)}
 
             <TopBar roomId={roomId} />
 
