@@ -1,13 +1,16 @@
 'use client';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import socket from '@/lib/socket';
 import Cookies from 'js-cookie';
 import { FaRandom } from 'react-icons/fa';
+import Link from "next/link";
 
 export default function Landing() {
     const [username, setUsername] = useState('');
     const [roomId, setRoomId] = useState('');
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
 
@@ -24,6 +27,7 @@ export default function Landing() {
         }
         Cookies.set('username', username);
         router.push('/room/' + roomId);
+        setIsLoading(true);
     };
 
     const handleKeyDown = async (e: string) => {
@@ -45,10 +49,18 @@ export default function Landing() {
 
     const handleClick = () => goToRoom();
 
+    if (isLoading)
+        return <div className={"flex h-screen w-screen items-center justify-center"}>
+            <h1>Redirecting you to room page...</h1>
+        </div>
+
     return (
         <div className="flex h-[100vh] w-[100vw] items-center justify-center">
             <div className="flex w-[50%] flex-col gap-2">
-                <h1 className={'mx-auto mb-12 text-5xl'}>Unmute</h1>
+                <h1 className={'mx-auto text-5xl'}>Unmute</h1>
+                <h2 className={"mx-auto mb-6"}>
+                    <Link className={"text-purple-500"} href={"https://github.com/thathammadali"} target={"_blank"}>By Hammad Ali </Link>
+                    </h2>
                 <input
                     className="h-12 rounded-3xl border border-gray-300 p-3"
                     placeholder="Username"

@@ -91,7 +91,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
             <div
                 className={'flex h-screen w-screen items-center justify-center'}
             >
-                <h1>Joining the specified room...</h1>{' '}
+                <h1>Joining the specified room...</h1>
             </div>
         );
 

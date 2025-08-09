@@ -29,6 +29,23 @@ export function ChatBar({ isVisible }: ChatBarProps) {
     const bottomRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const onMessagesFetched = (messages: SocketMessage[]) => {
+            setMessages(messages.map((message) => {
+                const isOwn = message.sender_id === socket.id;
+
+                return {
+                sender: isOwn ? null : message.sender_name,
+                    message: message.message,
+                    time: message.time,
+            }}));
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(()=>{
+                    setIsReady(true);
+                })
+            });
+        }
+
         const handleReceiveMessage = (message: SocketMessage) => {
             setMessages((prev: Array<IMessage>) => {
                 const isOwn = message.sender_id === socket.id;
@@ -43,11 +60,13 @@ export function ChatBar({ isVisible }: ChatBarProps) {
             });
         };
 
-        setIsReady(true);
+        socket.emit('fetch-messages');
+        socket.on('messages-fetched', onMessagesFetched);
         socket.on('receive-message', handleReceiveMessage);
 
         return () => {
             socket.off('receive-message', handleReceiveMessage);
+            socket.off('messages-fetched', onMessagesFetched);
         };
     }, []);
 

@@ -19,6 +19,7 @@ const io = new Server(server, {
 
 const sockets = {};
 const rooms = {};
+const messages = {};
 
 io.on('connection', (socket) => {
     console.log('User Connected!');
@@ -36,19 +37,31 @@ io.on('connection', (socket) => {
         // Map socketId to user
         sockets[socket.id] = { username: username, room: roomId };
 
-        socket.emit('room-joined', roomId);
+        socket.emit('room-joined', messages[roomId]);
         io.to(roomId).emit('user-joined', rooms[roomId]);
     });
 
-    socket.on('send-message', (message) => {
-        console.log(message);
+    socket.on('fetch-messages', ()=>{
+        const roomId = sockets[socket.id].room;
+        socket.emit('messages-fetched', (messages[roomId] ? messages[roomId] : []));
+    });
 
-        io.to(sockets[socket.id].room).emit('receive-message', {
+    socket.on('send-message', (message) => {
+
+        const _message = {
             sender_id: socket.id,
             sender_name: sockets[socket.id].username,
             message: message.message,
             time: message.time,
-        });
+        }
+
+        const room = sockets[socket.id].room;
+        if (!messages[room]) {
+            messages[room] = [];
+        }
+
+        messages[room].push(_message);
+        io.to(sockets[socket.id].room).emit('receive-message', _message);
     });
 
     socket.on('disconnect', () => {
@@ -58,7 +71,14 @@ io.on('connection', (socket) => {
         const room = user.room;
         console.log(`${username} has left ${room}!`);
 
+        delete sockets[socket.id];
+
         rooms[room] = rooms[room].filter((user) => user.id !== socket.id);
+
+        if (rooms[room].length === 0) {
+            delete rooms[room];
+            delete messages[room];
+        }
 
         io.to(room).emit('refresh-users', rooms[room]);
     });

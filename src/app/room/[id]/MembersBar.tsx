@@ -9,7 +9,9 @@ export function MembersBar({ isVisible }: MembersBarProps) {
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
-        setIsReady(true);
+        requestAnimationFrame(()=>{
+            setIsReady(true);
+        })
     }, []);
 
     return (
