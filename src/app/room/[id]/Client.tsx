@@ -14,7 +14,7 @@ interface User {
 }
 
 export default function RoomClient({ roomId }: { roomId: string }) {
-    const [users, setUsers] = useState<Array<string>>([]);
+    const [members, setMembers] = useState<Array<string>>([]);
 
     const [isConnected, setIsConnected] = useState(false);
     const [isConnecting, setIsConnecting] = useState(true);
@@ -64,7 +64,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
         socket.emit('prepare-room', roomId);
 
         const receiveUserList = (users: User[]) => {
-            setUsers(users.map((user) => user.username));
+            setMembers(users.map((user) => user.username));
         };
 
         socket.on('connect', onConnect);
@@ -98,10 +98,6 @@ export default function RoomClient({ roomId }: { roomId: string }) {
             </div>
         );
 
-    const gridSize = Math.ceil(Math.sqrt(users.length));
-    const colClass = `grid-cols-${gridSize}`;
-    const rowClass = `grid-rows-${gridSize}`;
-
     return (
         <div className={'flex h-screen w-screen flex-col bg-neutral-600'}>
             {/*Show a cover until all components are ready*/}
@@ -115,13 +111,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
 
             <div className={'flex w-full flex-1 overflow-x-hidden'}>
                 <MembersBar isVisible={isMembersBarVisible} isReady={isMembersBarReady} setIsReady={setIsMembersBarReady} />
-                <div
-                    className={`grid transition-all duration-150 ease-in-out ${colClass} ${rowClass} flex-1 gap-2 px-4`}
-                >
-                    {users.map((user, index) => (
-                        <UserCard key={index} username={user} />
-                    ))}
-                </div>
+                <MembersSection members={members} />
                 <ChatBar isVisible={isChatBarVisible} isReady={isChatBarReady} setIsReady={setIsChatBarReady} />
             </div>
 
@@ -133,7 +123,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
     );
 }
 
-function UserCard({ username }: { username: string }) {
+function MemberCard({ username }: { username: string }) {
     return (
         <div
             className={
@@ -143,4 +133,14 @@ function UserCard({ username }: { username: string }) {
             <h2 className={'text-9xl'}>{username[0]}</h2>
         </div>
     );
+}
+
+function MembersSection({members}: {members: string[]}) {
+    return <div
+        className={`grid transition-all duration-150 ease-in-out flex-1 gap-2 px-4`}
+    >
+        {members.map((member, index) => (
+            <MemberCard key={index} username={member}/>
+        ))}
+    </div>
 }
