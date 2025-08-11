@@ -13,6 +13,8 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "js-cookie": "^3.0.5",
+    "mediasoup": "^3.18.0",
+    "mediasoup-client": "^3.14.0",
     "nanoid": "^5.1.5",
     "next": "15.4.2",
     "nodemon": "^3.1.10",
