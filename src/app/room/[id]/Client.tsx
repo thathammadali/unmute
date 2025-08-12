@@ -101,18 +101,30 @@ export default function RoomClient({ roomId }: { roomId: string }) {
     return (
         <div className={'flex h-screen w-screen flex-col bg-neutral-600'}>
             {/*Show a cover until all components are ready*/}
-            {(isJoined && (!isMembersBarReady || !isChatBarReady)) && (<div
-            className={'absolute bg-white flex h-screen w-screen items-center justify-center'}
-        >
-            <h1>Preparing the room...</h1>
-        </div>)}
+            {isJoined && (!isMembersBarReady || !isChatBarReady) && (
+                <div
+                    className={
+                        'absolute flex h-screen w-screen items-center justify-center bg-white'
+                    }
+                >
+                    <h1>Preparing the room...</h1>
+                </div>
+            )}
 
             <TopBar roomId={roomId} />
 
             <div className={'flex w-full flex-1 overflow-x-hidden'}>
-                <MembersBar isVisible={isMembersBarVisible} isReady={isMembersBarReady} setIsReady={setIsMembersBarReady} />
+                <MembersBar
+                    isVisible={isMembersBarVisible}
+                    isReady={isMembersBarReady}
+                    setIsReady={setIsMembersBarReady}
+                />
                 <MembersSection members={members} />
-                <ChatBar isVisible={isChatBarVisible} isReady={isChatBarReady} setIsReady={setIsChatBarReady} />
+                <ChatBar
+                    isVisible={isChatBarVisible}
+                    isReady={isChatBarReady}
+                    setIsReady={setIsChatBarReady}
+                />
             </div>
 
             <BottomBar
@@ -135,11 +147,14 @@ function MemberCard({ username }: { username: string }) {
     );
 }
 
-function MembersSection({members}: {members: string[]}) {
+function MembersSection({ members }: { members: string[] }) {
     let grid_rows;
     let grid_cols;
 
-    if (members.length <= 2) {
+    if (members.length === 1) {
+        grid_rows = 1;
+        grid_cols = 1;
+    } else if (members.length === 2) {
         grid_rows = 1;
         grid_cols = 2;
     } else {
@@ -148,15 +163,17 @@ function MembersSection({members}: {members: string[]}) {
         grid_cols = x;
     }
 
-    return <div
-        className={`grid transition-all duration-150 ease-in-out flex-1 gap-2 px-4`}
-        style={{
-            gridTemplateColumns: `repeat(${grid_rows}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${grid_cols}, minmax(0, 1fr))`
-        }}
-    >
-        {members.map((member, index) => (
-            <MemberCard key={index} username={member}/>
-        ))}
-    </div>
+    return (
+        <div
+            className={`grid flex-1 gap-2 px-4 transition-all duration-300 ease-in-out`}
+            style={{
+                gridTemplateColumns: `repeat(${grid_cols}, minmax(0, 1fr))`,
+                gridTemplateRows: `repeat(${grid_rows}, minmax(0, 1fr))`,
+            }}
+        >
+            {members.map((member, index) => (
+                <MemberCard key={index} username={member} />
+            ))}
+        </div>
+    );
 }
