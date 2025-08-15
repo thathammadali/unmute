@@ -115,6 +115,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
 
             <div className={'flex w-full flex-1 overflow-x-hidden'}>
                 <MembersBar
+                    members={members}
                     isVisible={isMembersBarVisible}
                     isReady={isMembersBarReady}
                     setIsReady={setIsMembersBarReady}
