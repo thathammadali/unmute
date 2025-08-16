@@ -39,6 +39,7 @@ io.on('connection', (socket) => {
 
         socket.emit('room-joined', messages[roomId]);
         io.to(roomId).emit('user-joined', rooms[roomId]);
+        io.to(roomId).emit('user-joined-notif', username);
     });
 
     socket.on('fetch-messages', ()=>{

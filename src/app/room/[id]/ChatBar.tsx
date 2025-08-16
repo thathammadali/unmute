@@ -61,13 +61,27 @@ export function ChatBar({ isVisible, isReady, setIsReady }: ChatBarProps) {
             });
         };
 
+        const handleUserJoined = (username: string) => {
+            setMessages((prev: Array<IMessage>) => {
+                const notification = {
+                    sender: null,
+                    message: username,
+                    time: new Date().toLocaleTimeString()
+                }
+
+                return [...prev, notification];
+            })
+        }
+
         socket.emit('fetch-messages');
         socket.on('messages-fetched', onMessagesFetched);
         socket.on('receive-message', handleReceiveMessage);
+        socket.on('user-joined-notif', handleUserJoined);
 
         return () => {
             socket.off('receive-message', handleReceiveMessage);
             socket.off('messages-fetched', onMessagesFetched);
+            socket.off('user-joined-notif', handleUserJoined);
         };
     }, []);
 
