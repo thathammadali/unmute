@@ -7,6 +7,7 @@ import { MembersBar } from '@/app/room/[id]/MembersBar';
 import { ChatBar } from '@/app/room/[id]/ChatBar';
 import { BottomBar } from './BottomBar';
 import TopBar from '@/app/room/[id]/TopBar';
+import Presenter from './Presenter';
 
 interface User {
     id: string;
@@ -16,15 +17,21 @@ interface User {
 export default function RoomClient({ roomId }: { roomId: string }) {
     const [members, setMembers] = useState<Array<string>>([]);
 
+    // Connection States
     const [isConnected, setIsConnected] = useState(false);
     const [isConnecting, setIsConnecting] = useState(true);
     const [isJoined, setIsJoined] = useState(false);
 
+    // Bars Visibility States
     const [isMembersBarVisible, setIsMembersBarVisible] = useState(false);
     const [isChatBarVisible, setIsChatBarVisible] = useState(false);
 
+    // Bars Ready States
     const [isMembersBarReady, setIsMembersBarReady] = useState(false);
     const [isChatBarReady, setIsChatBarReady] = useState(false);
+
+    // Media States
+    const [screen, setScreen] = useState<MediaStream | null>(null);
 
     const router = useRouter();
 
@@ -120,6 +127,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
                     isReady={isMembersBarReady}
                     setIsReady={setIsMembersBarReady}
                 />
+                <Presenter screen={screen} />
                 <MembersSection members={members} />
                 <ChatBar
                     isVisible={isChatBarVisible}
@@ -131,6 +139,7 @@ export default function RoomClient({ roomId }: { roomId: string }) {
             <BottomBar
                 setIsMembersBarVisible={setIsMembersBarVisible}
                 setIsChatBarVisible={setIsChatBarVisible}
+                setScreen={setScreen}
             />
         </div>
     );

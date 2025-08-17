@@ -5,15 +5,36 @@ import { BsChat, BsPerson } from 'react-icons/bs';
 import { CiMicrophoneOff, CiMicrophoneOn } from 'react-icons/ci';
 import { MdCallEnd, MdOutlinePresentToAll } from 'react-icons/md';
 
-export function BottomBar(Props: {
+interface BottomBarProps {
     setIsMembersBarVisible: Function;
     setIsChatBarVisible: Function;
-}) {
-    const { setIsMembersBarVisible, setIsChatBarVisible } = Props;
+    setScreen: Function;
+}
+
+export function BottomBar({
+    setIsMembersBarVisible,
+    setIsChatBarVisible,
+    setScreen,
+}: BottomBarProps) {
     const [isMicOn, setIsMicOn] = useState(false);
+    const [isScreenOn, setIsScreenOn] = useState(false);
 
     const toggleMic = () => {
         setIsMicOn((pv) => !pv);
+    };
+
+    const toggleScreen = async () => {
+        if (isScreenOn) {
+            setIsScreenOn(false);
+            setScreen(null);
+        } else {
+            setScreen(
+                await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                })
+            );
+            setIsScreenOn(true);
+        }
     };
 
     const router = useRouter();
@@ -47,7 +68,7 @@ export function BottomBar(Props: {
 
                 <ActionButton
                     icon={<MdOutlinePresentToAll />}
-                    onClickHandler={() => {}}
+                    onClickHandler={toggleScreen}
                 />
                 <ActionButton
                     icon={<MdCallEnd />}
