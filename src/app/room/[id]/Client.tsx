@@ -127,8 +127,10 @@ export default function RoomClient({ roomId }: { roomId: string }) {
                     isReady={isMembersBarReady}
                     setIsReady={setIsMembersBarReady}
                 />
-                <Presenter screen={screen} />
-                <MembersSection members={members} />
+                <div className={'flex flex-1 flex-col'}>
+                    <Presenter screen={screen} />
+                    <MembersSection members={members} />
+                </div>
                 <ChatBar
                     isVisible={isChatBarVisible}
                     isReady={isChatBarReady}
@@ -175,7 +177,7 @@ function MembersSection({ members }: { members: string[] }) {
 
     return (
         <div
-            className={`grid flex-1 gap-2 px-4 transition-all duration-300 ease-in-out`}
+            className={`grid h-full w-full gap-2 px-4 transition-all duration-300 ease-in-out`}
             style={{
                 gridTemplateColumns: `repeat(${grid_cols}, minmax(0, 1fr))`,
                 gridTemplateRows: `repeat(${grid_rows}, minmax(0, 1fr))`,

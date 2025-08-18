@@ -20,12 +20,14 @@ export default function Presenter({ screen }: PresenterProps) {
     return (
         <>
             {screen && (
-                <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    className={'aspect-video flex-1'}
-                />
+                <div className={'h-[calc(100%-300px)] w-full'}>
+                    <video
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        className={'aspect-video flex-1'}
+                    />
+                </div>
             )}
         </>
     );
