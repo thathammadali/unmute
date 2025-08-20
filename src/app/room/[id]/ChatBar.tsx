@@ -26,39 +26,44 @@ interface ChatBarProps {
 export function ChatBar({ isVisible, isReady, setIsReady }: ChatBarProps) {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState<Array<IMessage>>([]);
+    const [newMessages, setNewMessages] = useState<IMessage[]>([]);
 
     const bottomRef = useRef<HTMLDivElement>(null);
+    const isVisibleRef = useRef<boolean>(isVisible);
 
     useEffect(() => {
         const onMessagesFetched = (messages: SocketMessage[]) => {
-            setMessages(messages.map((message) => {
-                const isOwn = message.sender_id === socket.id;
+            setNewMessages(
+                messages.map((message) => {
+                    const isOwn = message.sender_id === socket.id;
 
-                return {
-                sender: isOwn ? null : message.sender_name,
-                    message: message.message,
-                    time: message.time,
-            }}));
+                    return {
+                        sender: isOwn ? null : message.sender_name,
+                        message: message.message,
+                        time: message.time,
+                    };
+                })
+            );
 
             requestAnimationFrame(() => {
-                requestAnimationFrame(()=>{
-                    setIsReady(true);
-                })
+                setIsReady(true);
             });
-        }
+        };
 
         const handleReceiveMessage = (message: SocketMessage) => {
-            setMessages((prev: Array<IMessage>) => {
-                const isOwn = message.sender_id === socket.id;
+            const isOwn = message.sender_id === socket.id;
 
-                const newMessage = {
-                    sender: isOwn ? null : message.sender_name,
-                    message: message.message,
-                    time: message.time,
-                };
+            const newMessage = {
+                sender: isOwn ? null : message.sender_name,
+                message: message.message,
+                time: message.time,
+            };
 
-                return [...prev, newMessage];
-            });
+            if (isVisibleRef.current) {
+                setMessages((prev) => [...prev, newMessage]);
+            } else {
+                setNewMessages((prev) => [...prev, newMessage]);
+            }
         };
 
         const handleUserJoined = (username: string) => {
@@ -66,12 +71,12 @@ export function ChatBar({ isVisible, isReady, setIsReady }: ChatBarProps) {
                 const notification = {
                     sender: null,
                     message: username,
-                    time: new Date().toLocaleTimeString()
-                }
+                    time: new Date().toLocaleTimeString(),
+                };
 
                 return [...prev, notification];
-            })
-        }
+            });
+        };
 
         socket.emit('fetch-messages');
         socket.on('messages-fetched', onMessagesFetched);
@@ -88,6 +93,14 @@ export function ChatBar({ isVisible, isReady, setIsReady }: ChatBarProps) {
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
+
+    useEffect(() => {
+        if (isVisible) {
+            setMessages((prev) => [...prev, ...newMessages]);
+            setNewMessages([]);
+        }
+        isVisibleRef.current = isVisible;
+    }, [isVisible]);
 
     const sendMessage = () => {
         if (text === '' || text.trim() === '') {
