@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ActionButton, ToggleButton } from '@/app/room/[id]/Buttons';
-import { BsChat, BsPerson } from 'react-icons/bs';
+import { BsPerson } from 'react-icons/bs';
 import { CiMicrophoneOff, CiMicrophoneOn } from 'react-icons/ci';
 import { MdCallEnd, MdOutlinePresentToAll } from 'react-icons/md';
+import { LuMessageSquare } from 'react-icons/lu';
 
 interface BottomBarProps {
     setIsMembersBarVisible: Function;
@@ -79,7 +80,7 @@ export function BottomBar({
 
             <div className={'flex h-full w-20 items-center justify-center'}>
                 <ActionButton
-                    icon={<BsChat />}
+                    icon={<LuMessageSquare />}
                     onClickHandler={() =>
                         setIsChatBarVisible((pv: boolean) => !pv)
                     }

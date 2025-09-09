@@ -3,19 +3,8 @@ import { ActionButton } from '@/app/room/[id]/Buttons';
 import { BiSend } from 'react-icons/bi';
 import socket from '@/lib/socket';
 import Bar from '@/app/room/[id]/Bar';
-
-interface IMessage {
-    sender: string | null;
-    message: string;
-    time: string;
-}
-
-interface SocketMessage {
-    sender_id: string;
-    sender_name: string;
-    message: string;
-    time: string;
-}
+import { IMessage } from '@/app/room/[id]/types';
+import { SocketMessage } from '../../../../server/types';
 
 interface ChatBarProps {
     isVisible: boolean;
@@ -38,6 +27,7 @@ export function ChatBar({ isVisible, isReady, setIsReady }: ChatBarProps) {
                     const isOwn = message.sender_id === socket.id;
 
                     return {
+                        type: isOwn ? 'own' : 'other',
                         sender: isOwn ? null : message.sender_name,
                         message: message.message,
                         time: message.time,
@@ -54,6 +44,7 @@ export function ChatBar({ isVisible, isReady, setIsReady }: ChatBarProps) {
             const isOwn = message.sender_id === socket.id;
 
             const newMessage = {
+                type: isOwn ? 'own' : 'other',
                 sender: isOwn ? null : message.sender_name,
                 message: message.message,
                 time: message.time,
@@ -69,6 +60,7 @@ export function ChatBar({ isVisible, isReady, setIsReady }: ChatBarProps) {
         const handleUserJoined = (username: string) => {
             setMessages((prev: Array<IMessage>) => {
                 const notification = {
+                    type: 'notification',
                     sender: null,
                     message: username,
                     time: new Date().toLocaleTimeString(),
@@ -165,6 +157,7 @@ function MessageContainer({
             {messages.map((message, index) => (
                 <Message
                     key={index}
+                    type={message.type}
                     sender={message.sender}
                     message={message.message}
                     time={message.time}
@@ -175,14 +168,27 @@ function MessageContainer({
     );
 }
 
-function Message({ sender, message, time }: IMessage) {
+function Message({ type, sender, message, time }: IMessage) {
+    let position;
+    let style;
+
+    switch (type) {
+        case 'own':
+            position = 'justify-start';
+            style = 'flex w-[90%] flex-col gap-2 rounded-xl p-2 bg-blue-300';
+            break;
+        case 'other':
+            position = 'justify-end';
+            style = 'flex w-[90%] flex-col gap-2 rounded-xl p-2 bg-gray-300';
+            break;
+        case 'notification':
+            position = 'justify-start';
+            style = 'flex w-full flex-col gap-2 rounded-xl p-2';
+    }
+
     return (
-        <div
-            className={`flex w-full ${sender ? 'justify-start' : 'justify-end'}`}
-        >
-            <div
-                className={`flex w-[90%] flex-col gap-2 rounded-xl p-2 ${sender ? 'bg-blue-300' : 'bg-gray-300'}`}
-            >
+        <div className={`flex w-full ${position}`}>
+            <div className={style}>
                 {sender && <h2 className={'font-bold'}>{sender}</h2>}
                 <p>{message}</p>
                 <p className={'ml-auto text-neutral-500'}>{time}</p>
